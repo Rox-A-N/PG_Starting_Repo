@@ -14,12 +14,16 @@ app.use(express.static('server/public'));
 // Setup the songs router
 // to respond to requests from the `/songs` URL
 let songsRouter = require('./routes/songs.router');
+let musicLibraryRouter = require('./routes/musicLibrary');
+
 app.use('/songs', songsRouter);
+app.use('/musicLibrary', musicLibraryRouter);   // if someone wants musicLibrary they get sent to the musicLibraryRouter
 
 
 // Start express
-const PORT = 5000;
+const PORT = 5001;
 app.listen(PORT, () => {
-    console.log('up and running on port', PORT);
+    console.log('up and running on port', PORT);    // this makes this info pop up in the console below so we know its working
 });
 
+// doesn't talk to the database
