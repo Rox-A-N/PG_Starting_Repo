@@ -9,7 +9,17 @@ function onReady() {
 }
 
 function handleRankUp() {
+    const id = $(this).parent().parent().data('id');
     console.log('rank up');
+    $.ajax({
+        type: 'PUT',
+        url: `/musicLibrary/rank/${id}`,
+        data: {direction: 'up'},
+    }).then(function() {
+        getSongs();
+    }).catch(function(error) {
+        console.log('error w/ putting', error);
+    })
 }   // end handleRankUp
 
 function handleRankDown() {
@@ -18,7 +28,7 @@ function handleRankDown() {
 
 
 function handleDelete() {
-    const id = $(this).data('id');  // neatens up the code we use in url:
+    const id = $(this).parent().parent().data('id');  // neatens up the code we use in url:
     $.ajax({
         type: 'DELETE',
         url: `/musicLibrary/${id}`
@@ -41,7 +51,7 @@ function getSongs() {
         // append data to the DOM
         for (let i = 0; i < response.length; i++) {
             $('#songsTableBody').append(`
-                <tr>
+                <tr data-id=${response[i].id}>
                     <td>${response[i].artist}</td>
                     <td>${response[i].track}</td>
                     <td>${response[i].rank}</td>
@@ -51,7 +61,7 @@ function getSongs() {
                         <button class="rank-down">DOWN</button>
                     </td>
                     <td>
-                        <button class="delete" data-id= ${response[i].id}>
+                        <button class="delete">
                             DELETE
                         </button>
                     </td>
