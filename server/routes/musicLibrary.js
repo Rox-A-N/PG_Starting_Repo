@@ -72,9 +72,32 @@ router.post('/', (req, res) => {    // send the data back w/ this function
 
 //put request: meaning "update to"
 router.put('/rank/:id', (req, res) => {
-    console.log('rank id', req.params.id);  // in terminal as rank id (a number)
-    console.log('rank body', req.body); // in terminal as rank body {}
-    res.sendStatus(200);    // again, reminder---- we need a response to load
+    // console.log('rank id', req.params.id);  // in terminal as rank id (a number)
+    // console.log('rank body', req.body); // in terminal as rank body {}
+    const direction = req.body.direction;   // shortcut to writing out req.body.direction every time
+    let queryText = ''; // defined outside of if/else so each statement can use it vs only one statement
+
+    if(direction == 'up') {
+        // increase rank
+        queryText = `UPDATE "songs" SET "rank"=rank + 1 WHERE "id"=${req.params.id};`;
+
+    } else if (direction == 'down') {
+        //decrease rank
+        queryText = `UPDATE "songs" SET "rank"=rank - 1 WHERE "id"=${req.params.id};`;
+    } else {
+        res.sendStatus(500);
+        return; // if we send back a 500- kick us out of this function, we're done
+    }
+
+    pool.query(queryText)
+    .then((dbResponse) => {
+        console.log('dbResponse', dbResponse);
+        res.sendStatus(200);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
+    })  
 })
 
 module.exports = router;    // if error, this may be what is needed
