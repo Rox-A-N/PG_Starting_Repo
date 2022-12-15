@@ -34,6 +34,8 @@ router.get('/:id', (req, res) => {
     });
 });
 
+
+
 router.delete('/:id', (req, res) => {
     console.log("Hello from delete request!", req.params.id);
     const queryText = `DELETE from songs WHERE id = ${req.params.id};`;
@@ -66,6 +68,13 @@ router.post('/', (req, res) => {    // send the data back w/ this function
         console.log('error making insert query', error);
         res.sendStatus(500);
     })
+});
+
+//put request: meaning "update to"
+router.put('/rank/:id', (req, res) => {
+    console.log('rank id', req.params.id);  // in terminal as rank id (a number)
+    console.log('rank body', req.body); // in terminal as rank body {}
+    res.sendStatus(200);    // again, reminder---- we need a response to load
 })
 
 module.exports = router;    // if error, this may be what is needed
